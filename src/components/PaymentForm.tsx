@@ -49,6 +49,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden fade-in-section">
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
         <h3 className="text-lg font-semibold">Complete Your Subscription</h3>
+        <p className="text-sm text-gray-500 mt-1">Selected plan: {selectedPlan} (${planPrice})</p>
       </div>
       
       <form onSubmit={handleSubmit} className="p-6">
@@ -139,7 +140,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
         {paymentMethod === 'apple' && (
           <div className="my-8 flex justify-center">
             <div 
-              className="apple-pay-button w-full max-w-xs"
+              className="apple-pay-button w-full max-w-xs bg-black text-white py-3 px-4 rounded-lg text-center"
               role="button"
               aria-label="Apple Pay"
               tabIndex={0}
@@ -147,7 +148,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
                 e.preventDefault();
                 handleSubmit(e as any);
               }}
-            ></div>
+            >
+              Pay with Apple Pay
+            </div>
           </div>
         )}
         
@@ -192,12 +195,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
               `Pay $${planPrice} Now`
             )}
           </button>
-        )}
-        
-        {paymentMethod === 'apple' && (
-          <div className="mt-6">
-            <p className="text-sm text-gray-500 text-center">Click the Apple Pay button above to complete your purchase</p>
-          </div>
         )}
       </form>
     </div>
