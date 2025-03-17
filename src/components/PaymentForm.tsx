@@ -81,7 +81,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
           </div>
         </div>
         
-        {paymentMethod === 'card' ? (
+        {paymentMethod === 'card' && (
           <>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -128,7 +128,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
               />
             </div>
           </>
-        ) : (
+        )}
+        
+        {paymentMethod === 'apple' && (
           <div className="my-8 flex justify-center">
             <div 
               className="apple-pay-button w-full max-w-xs"
@@ -184,6 +186,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
               `Pay $${planPrice} Now`
             )}
           </button>
+        )}
+        
+        {paymentMethod === 'apple' && (
+          <div className="mt-6">
+            <p className="text-sm text-gray-500 text-center">Click the Apple Pay button above to complete your purchase</p>
+          </div>
         )}
       </form>
     </div>
