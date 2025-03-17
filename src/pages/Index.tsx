@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -12,26 +11,32 @@ import { ChevronDown } from 'lucide-react';
 const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState<"weekly" | "monthly" | null>(null);
   
-  // Get selected plan price
   const getPlanPrice = () => {
     if (selectedPlan === 'weekly') return 49.99;
     if (selectedPlan === 'monthly') return 149.99;
     return 0;
   };
+
+  const handleSelectPlan = (plan: "weekly" | "monthly") => {
+    console.log("Setting selected plan to:", plan);
+    setSelectedPlan(plan);
+    
+    setTimeout(() => {
+      const subscribeSection = document.getElementById('subscribe');
+      subscribeSection?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
   
-  // Setup intersection observer for animations
   useEffect(() => {
     const observer = setupIntersectionObserver();
     
     return () => {
-      // Cleanup observer
       document.querySelectorAll('.fade-in-section').forEach(
         element => observer.unobserve(element)
       );
     };
   }, []);
   
-  // Scroll to pricing section when selecting a plan from hero
   const handlePricingClick = () => {
     const pricingSection = document.getElementById('pricing');
     pricingSection?.scrollIntoView({ behavior: 'smooth' });
@@ -46,7 +51,6 @@ const Index = () => {
         
         <Benefits />
         
-        {/* Pricing Section */}
         <section id="pricing" className="py-20">
           <div className="section-container">
             <div className="text-center mb-16">
@@ -73,7 +77,7 @@ const Index = () => {
                     "Weekend peak hour priority",
                     "Access to driver community"
                   ]}
-                  onSelect={setSelectedPlan}
+                  onSelect={handleSelectPlan}
                   isSelected={selectedPlan === "weekly"}
                 />
                 
@@ -89,7 +93,7 @@ const Index = () => {
                     "Driver perks program access",
                     "Exclusive partner discounts"
                   ]}
-                  onSelect={setSelectedPlan}
+                  onSelect={handleSelectPlan}
                   isSelected={selectedPlan === "monthly"}
                 />
               </div>
@@ -104,7 +108,6 @@ const Index = () => {
           </div>
         </section>
         
-        {/* FAQ Section */}
         <section id="faq" className="py-20 bg-gray-50">
           <div className="section-container">
             <div className="text-center mb-16">
@@ -158,7 +161,6 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Testimonials */}
         <section className="py-20 bg-white">
           <div className="section-container">
             <div className="text-center mb-16">
@@ -224,7 +226,6 @@ const Index = () => {
           </div>
         </section>
         
-        {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-jeeny to-jeeny-dark text-white">
           <div className="section-container text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight fade-in-section">
