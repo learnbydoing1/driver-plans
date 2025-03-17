@@ -1,11 +1,12 @@
-
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, setLanguage, dir } = useLanguage();
   
   // Handle scroll effect
   useEffect(() => {
@@ -20,6 +21,10 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'ar' : 'en');
+  };
   
   return (
     <header 
@@ -29,42 +34,60 @@ const Navbar = () => {
           ? "py-3 bg-white/80 backdrop-blur-lg shadow-sm" 
           : "py-5 bg-transparent"
       )}
+      dir={dir}
     >
       <div className="container px-4 mx-auto flex items-center justify-between">
         <a href="#" className="relative z-10">
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-jeeny to-jeeny-dark">
-            Jeeny<span className="text-black">Drive</span>
-          </h1>
+          <img 
+            src="https://www.jeeny.me/static/images/v2/Layer%202.svg" 
+            alt="Jeeny Logo" 
+            className="h-8 w-auto"
+          />
         </a>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-8" dir={dir}>
           <a href="#benefits" className="text-sm font-medium text-gray-600 hover:text-jeeny transition-colors">
-            Benefits
+            {language === 'en' ? 'Benefits' : 'المميزات'}
           </a>
           <a href="#pricing" className="text-sm font-medium text-gray-600 hover:text-jeeny transition-colors">
-            Pricing
+            {language === 'en' ? 'Pricing' : 'الأسعار'}
           </a>
           <a href="#faq" className="text-sm font-medium text-gray-600 hover:text-jeeny transition-colors">
-            FAQ
+            {language === 'en' ? 'FAQ' : 'الأسئلة الشائعة'}
           </a>
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-jeeny transition-colors"
+          >
+            <Globe className="h-4 w-4" />
+            {language === 'en' ? 'عربي' : 'English'}
+          </button>
           <a href="#subscribe" className="button-primary">
-            Subscribe Now
+            {language === 'en' ? 'Subscribe Now' : 'اشترك الآن'}
           </a>
         </nav>
         
         {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden relative z-10" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-6 w-6 text-foreground" />
-          ) : (
-            <Menu className="h-6 w-6 text-foreground" />
-          )}
-        </button>
+        <div className="md:hidden flex items-center gap-4 relative z-10">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-jeeny transition-colors"
+          >
+            <Globe className="h-4 w-4" />
+            {language === 'en' ? 'عربي' : 'English'}
+          </button>
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6 text-foreground" />
+            ) : (
+              <Menu className="h-6 w-6 text-foreground" />
+            )}
+          </button>
+        </div>
         
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
@@ -74,28 +97,28 @@ const Navbar = () => {
               className="text-xl font-medium text-foreground"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Benefits
+              {language === 'en' ? 'Benefits' : 'المميزات'}
             </a>
             <a 
               href="#pricing" 
               className="text-xl font-medium text-foreground"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Pricing
+              {language === 'en' ? 'Pricing' : 'الأسعار'}
             </a>
             <a 
               href="#faq" 
               className="text-xl font-medium text-foreground"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              FAQ
+              {language === 'en' ? 'FAQ' : 'الأسئلة الشائعة'}
             </a>
             <a 
               href="#subscribe" 
               className="button-primary"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Subscribe Now
+              {language === 'en' ? 'Subscribe Now' : 'اشترك الآن'}
             </a>
           </div>
         )}

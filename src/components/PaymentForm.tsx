@@ -1,210 +1,176 @@
-
-import { useState, useEffect } from 'react';
-import { Check, CreditCard, Apple } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { toast } from '@/components/ui/use-toast';
+import { useState } from 'react';
+import { Wallet, CreditCard, Apple } from 'lucide-react';
 
 interface PaymentFormProps {
-  selectedPlan: "weekly" | "monthly" | null;
+  selectedPlan: string;
   planPrice: number;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) => {
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple'>('card');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  
-  // Force re-render when plan changes to ensure form visibility
-  useEffect(() => {
-    console.log("Selected plan changed to:", selectedPlan);
-  }, [selectedPlan]);
-  
-  // Mock form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!selectedPlan) return;
-    
-    setIsProcessing(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsProcessing(false);
-      setIsComplete(true);
-      
-      toast({
-        title: "Payment Successful",
-        description: `Your ${selectedPlan} subscription has been activated.`,
-      });
-      
-      // Reset after 3 seconds
-      setTimeout(() => setIsComplete(false), 3000);
-    }, 1500);
-  };
-  
-  // Always render the form component to avoid unmounting issues
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden fade-in-section">
-      <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold">Complete Your Subscription</h3>
-        {selectedPlan ? (
-          <p className="text-sm text-gray-500 mt-1">Selected plan: {selectedPlan} (${planPrice})</p>
-        ) : (
-          <p className="text-sm text-gray-500 mt-1">Please select a subscription plan to continue</p>
-        )}
+interface CardDetails {
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+  name: string;
+}
+
+const PaymentOption = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  selected, 
+  onClick 
+}: { 
+  icon: any; 
+  title: string; 
+  description: string;
+  selected?: boolean;
+  onClick?: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`w-full p-4 rounded-lg border-2 flex items-center gap-4 transition-colors ${
+      selected ? 'border-jeeny' : 'border-gray-200 hover:border-jeeny/50'
+    }`}
+  >
+    <div className="h-12 w-12 bg-gray-900 rounded-full flex items-center justify-center flex-shrink-0">
+      <Icon className="h-6 w-6 text-white" />
+    </div>
+    <div className="flex-grow text-left">
+      <div className="font-medium text-gray-900">{title}</div>
+      <div className="text-sm text-gray-500">{description}</div>
+    </div>
+  </button>
+);
+
+const CardDetailsForm = ({ 
+  cardDetails, 
+  setCardDetails
+}: { 
+  cardDetails: CardDetails;
+  setCardDetails: (details: CardDetails) => void;
+}) => (
+  <div className="mt-6 space-y-4">
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Name on Card
+      </label>
+      <input
+        type="text"
+        value={cardDetails.name}
+        onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
+        placeholder="John Doe"
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Card Number
+      </label>
+      <input
+        type="text"
+        value={cardDetails.cardNumber}
+        onChange={(e) => {
+          const value = e.target.value.replace(/\D/g, '').slice(0, 16);
+          const formatted = value.replace(/(\d{4})/g, '$1 ').trim();
+          setCardDetails({ ...cardDetails, cardNumber: formatted });
+        }}
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
+        placeholder="1234 5678 9012 3456"
+      />
+    </div>
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Expiry Date
+        </label>
+        <input
+          type="text"
+          value={cardDetails.expiryDate}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+            if (value.length >= 2) {
+              const formatted = value.slice(0, 2) + '/' + value.slice(2);
+              setCardDetails({ ...cardDetails, expiryDate: formatted });
+            } else {
+              setCardDetails({ ...cardDetails, expiryDate: value });
+            }
+          }}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
+          placeholder="MM/YY"
+        />
       </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          CVV
+        </label>
+        <input
+          type="text"
+          value={cardDetails.cvv}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, '').slice(0, 3);
+            setCardDetails({ ...cardDetails, cvv: value });
+          }}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
+          placeholder="123"
+        />
+      </div>
+    </div>
+  </div>
+);
+
+const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) => {
+  const [selectedPayment, setSelectedPayment] = useState<'wallet' | 'apple' | 'card'>('wallet');
+  const [cardDetails, setCardDetails] = useState<CardDetails>({
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    name: ''
+  });
+
+  return (
+    <div className="bg-white rounded-xl p-6 border border-gray-200">
+      <h2 className="text-2xl font-bold mb-6">
+        Payment Method
+      </h2>
       
-      {!selectedPlan ? (
-        <div className="text-center p-8">
-          <p className="text-gray-500">Select a plan above to view payment options</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Payment Method
-            </label>
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('card')}
-                className={cn(
-                  "flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all",
-                  paymentMethod === 'card' 
-                    ? "border-jeeny bg-jeeny/5 text-jeeny"
-                    : "border-gray-200 hover:border-gray-300"
-                )}
-              >
-                <CreditCard className="h-5 w-5" />
-                <span>Credit Card</span>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('apple')}
-                className={cn(
-                  "flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all",
-                  paymentMethod === 'apple' 
-                    ? "border-jeeny bg-jeeny/5 text-jeeny"
-                    : "border-gray-200 hover:border-gray-300"
-                )}
-              >
-                <Apple className="h-5 w-5" />
-                <span>Apple Pay</span>
-              </button>
-            </div>
-          </div>
-          
-          {paymentMethod === 'card' && (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Card Number
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="4242 4242 4242 4242"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-jeeny focus:ring-2 focus:ring-jeeny/20 outline-none transition-all"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Expiration Date
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="MM/YY"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-jeeny focus:ring-2 focus:ring-jeeny/20 outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Security Code
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="CVC"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-jeeny focus:ring-2 focus:ring-jeeny/20 outline-none transition-all"
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name on Card
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="John Doe"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-jeeny focus:ring-2 focus:ring-jeeny/20 outline-none transition-all"
-                />
-              </div>
-            </>
-          )}
-          
-          {paymentMethod === 'apple' && (
-            <div className="my-8 flex justify-center">
-              <div 
-                className="apple-pay-button w-full max-w-xs bg-black text-white py-3 px-4 rounded-lg text-center"
-                role="button"
-                aria-label="Apple Pay"
-                tabIndex={0}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubmit(e as any);
-                }}
-              >
-                Pay with Apple Pay
-              </div>
-            </div>
-          )}
-          
-          <div className="border-t border-gray-200 pt-4 mt-6">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-600">Subscription Plan ({selectedPlan})</span>
-              <span>${planPrice}</span>
-            </div>
-            <div className="flex justify-between items-center mb-4 font-medium">
-              <span>Total</span>
-              <span>${planPrice}</span>
-            </div>
-          </div>
-          
-          {paymentMethod === 'card' && (
-            <button
-              type="submit"
-              disabled={isProcessing || isComplete}
-              className={cn(
-                "w-full mt-6 py-4 rounded-lg font-medium text-white transition-all flex items-center justify-center",
-                isComplete 
-                  ? "bg-green-500" 
-                  : isProcessing 
-                  ? "bg-jeeny opacity-80 cursor-not-allowed" 
-                  : "bg-jeeny hover:bg-jeeny-dark"
-              )}
-            >
-              {isComplete ? (
-                <>
-                  <Check className="h-5 w-5 mr-2" />
-                  Payment Successful
-                </>
-              ) : isProcessing ? (
-                <div className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Processing...
-                </div>
-              ) : (
-                `Pay $${planPrice} Now`
-              )}
-            </button>
-          )}
-        </form>
+      <div className="space-y-4 mb-8">
+        <PaymentOption
+          icon={Wallet}
+          title="Jeeny Wallet"
+          description="Pay using your wallet balance"
+          selected={selectedPayment === 'wallet'}
+          onClick={() => setSelectedPayment('wallet')}
+        />
+        <PaymentOption
+          icon={Apple}
+          title="Apple Pay"
+          description="Pay using Apple Pay"
+          selected={selectedPayment === 'apple'}
+          onClick={() => setSelectedPayment('apple')}
+        />
+        <PaymentOption
+          icon={CreditCard}
+          title="Credit Card"
+          description="Pay using your credit card"
+          selected={selectedPayment === 'card'}
+          onClick={() => setSelectedPayment('card')}
+        />
+      </div>
+
+      {selectedPayment === 'card' && (
+        <CardDetailsForm cardDetails={cardDetails} setCardDetails={setCardDetails} />
       )}
+
+      <div className="mt-8 pt-6 border-t">
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-gray-600">Total</span>
+          <span className="text-2xl font-bold">SAR {planPrice}</span>
+        </div>
+
+        <button className="w-full py-3 px-4 bg-jeeny text-white font-medium rounded-lg hover:bg-jeeny/90 transition-colors">
+          Pay Now
+        </button>
+      </div>
     </div>
   );
 };
