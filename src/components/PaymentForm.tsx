@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Check, CreditCard, Apple } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from '@/components/ui/use-toast';
 
 interface PaymentFormProps {
   selectedPlan: "weekly" | "monthly" | null;
@@ -25,6 +26,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
     setTimeout(() => {
       setIsProcessing(false);
       setIsComplete(true);
+      
+      toast({
+        title: "Payment Successful",
+        description: `Your ${selectedPlan} subscription has been activated.`,
+      });
       
       // Reset after 3 seconds
       setTimeout(() => setIsComplete(false), 3000);
