@@ -1,4 +1,6 @@
+
 import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import SubscriptionCard from '../components/SubscriptionCard';
@@ -8,6 +10,44 @@ import Footer from '../components/Footer';
 const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState<"weekly" | "monthly" | null>(null);
   const [showPayment, setShowPayment] = useState(false);
+  const { language } = useLanguage();
+
+  const translations = {
+    ar: {
+      flexiblePlans: 'باقات مرنة',
+      chooseSubscription: 'اختر خطة الاشتراك',
+      selectPlan: 'اختر الخطة التي تناسب جدول قيادتك وأهدافك',
+      weeklyFeatures: [
+        'صفر عمولة على الرحلات',
+        'أولوية في طلبات التوصيل',
+        'أولوية في ساعات الذروة',
+        'الوصول إلى مجتمع السائقين'
+      ],
+      monthlyFeatures: [
+        'جميع مميزات الباقة الأسبوعية',
+        'دعم فني على مدار الساعة',
+        'برنامج مكافآت السائقين',
+        'خصومات حصرية من الشركاء'
+      ]
+    },
+    en: {
+      flexiblePlans: 'Flexible Plans',
+      chooseSubscription: 'Choose Your Subscription Plan',
+      selectPlan: 'Select the plan that best fits your driving schedule and goals',
+      weeklyFeatures: [
+        'Zero commission on rides',
+        'Priority ride matching',
+        'Weekend peak hour priority',
+        'Access to driver community'
+      ],
+      monthlyFeatures: [
+        'All Weekly Plan features',
+        '24/7 Premium support',
+        'Driver perks program access',
+        'Exclusive partner discounts'
+      ]
+    }
+  };
 
   const getPlanPrice = () => {
     if (selectedPlan === 'weekly') return 49.99;
@@ -20,6 +60,8 @@ const Index = () => {
     setShowPayment(true);
   };
 
+  const t = translations[language];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -30,13 +72,13 @@ const Index = () => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <span className="inline-block px-4 py-1.5 mb-6 text-sm font-medium text-jeeny bg-jeeny/10 rounded-full">
-                Flexible Plans
+                {t.flexiblePlans}
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Choose Your Subscription Plan
+                {t.chooseSubscription}
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Select the plan that best fits your driving schedule and goals.
+                {t.selectPlan}
               </p>
             </div>
             
@@ -45,12 +87,7 @@ const Index = () => {
                 <SubscriptionCard
                   type="weekly"
                   price={49.99}
-                  features={[
-                    "Zero commission on rides",
-                    "Priority ride matching",
-                    "Weekend peak hour priority",
-                    "Access to driver community"
-                  ]}
+                  features={t.weeklyFeatures}
                   onSelect={handlePlanSelect}
                   isSelected={selectedPlan === "weekly"}
                 />
@@ -58,12 +95,7 @@ const Index = () => {
                 <SubscriptionCard
                   type="monthly"
                   price={149.99}
-                  features={[
-                    "All Weekly Plan features",
-                    "24/7 Premium support",
-                    "Driver perks program access",
-                    "Exclusive partner discounts"
-                  ]}
+                  features={t.monthlyFeatures}
                   onSelect={handlePlanSelect}
                   isSelected={selectedPlan === "monthly"}
                 />
