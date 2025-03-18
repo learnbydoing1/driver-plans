@@ -1,29 +1,69 @@
+
 import { ArrowRight, Wallet, Percent } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Hero = () => {
+  const { language } = useLanguage();
+
+  const translations = {
+    ar: {
+      zeroCommission: 'صفر عمولة',
+      title: 'احتفظ بنسبة ',
+      titleSpan: '١٠٠٪',
+      titleEnd: ' من أرباحك',
+      subtitle: 'اشترك في جيني واستمتع بعمولة صفرية على جميع رحلاتك. لا رسوم خفية، فقط اشتراك بسيط يتيح لك الاحتفاظ بكل ما تكسبه.',
+      startEarning: 'ابدأ الكسب الآن',
+      features: {
+        commission: 'صفر عمولة',
+        earnings: 'احتفظ بكامل أرباحك',
+        activation: 'تفعيل فوري'
+      }
+    },
+    en: {
+      zeroCommission: 'Zero Commission',
+      title: 'Keep ',
+      titleSpan: '100%',
+      titleEnd: ' of what you earn',
+      subtitle: 'Subscribe to Jeeny and enjoy zero commission on all your rides. No hidden fees, just a simple subscription that lets you keep everything you earn.',
+      startEarning: 'Start Earning More',
+      features: {
+        commission: 'Zero Commission',
+        earnings: 'Keep 100% Earnings',
+        activation: 'Instant activation'
+      }
+    }
+  };
+
+  const t = translations[language];
+
   return (
-    <section className="pt-24 pb-12 md:pt-32 md:pb-16">
+    <section className="pt-24 pb-12 md:pt-32 md:pb-16" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block px-4 py-1.5 mb-6 text-sm font-medium text-jeeny bg-jeeny/10 rounded-full">
-            Zero Commission
+            {t.zeroCommission}
           </span>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            Keep <span className="text-jeeny">100%</span> of what you earn
+            {t.title}<span className="text-jeeny">{t.titleSpan}</span>{t.titleEnd}
           </h2>
           
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Subscribe to Jeeny and enjoy zero commission on all your rides. No hidden fees, just a simple subscription that lets you keep everything you earn.
+            {t.subtitle}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
               href="#pricing" 
-              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-jeeny hover:bg-jeeny/90 rounded-lg transition-colors group"
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-jeeny hover:bg-jeeny/90 rounded-md transition-colors group"
             >
-              Start Earning More
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              {t.startEarning}
+              {language === 'en' && (
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              )}
+              {language === 'ar' && (
+                <ArrowRight className="mr-2 h-4 w-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
+              )}
             </a>
           </div>
           
@@ -32,8 +72,8 @@ const Hero = () => {
               <div className="h-12 w-12 bg-jeeny/10 rounded-full flex items-center justify-center">
                 <Percent className="h-6 w-6 text-jeeny" />
               </div>
-              <span className="ml-2 text-gray-600 font-medium">
-                Zero Commission
+              <span className={`${language === 'ar' ? 'mr-2' : 'ml-2'} text-gray-600 font-medium`}>
+                {t.features.commission}
               </span>
             </div>
             
@@ -41,8 +81,8 @@ const Hero = () => {
               <div className="h-12 w-12 bg-jeeny/10 rounded-full flex items-center justify-center">
                 <Wallet className="h-6 w-6 text-jeeny" />
               </div>
-              <span className="ml-2 text-gray-600 font-medium">
-                Keep 100% Earnings
+              <span className={`${language === 'ar' ? 'mr-2' : 'ml-2'} text-gray-600 font-medium`}>
+                {t.features.earnings}
               </span>
             </div>
             
@@ -52,8 +92,8 @@ const Hero = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="ml-2 text-gray-600 font-medium">
-                Instant activation
+              <span className={`${language === 'ar' ? 'mr-2' : 'ml-2'} text-gray-600 font-medium`}>
+                {t.features.activation}
               </span>
             </div>
           </div>

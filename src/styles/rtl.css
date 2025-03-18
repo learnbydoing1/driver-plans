@@ -1,3 +1,4 @@
+
 /* RTL Styles */
 [dir="rtl"] {
   font-family: 'Noto Sans Arabic', sans-serif;
@@ -38,5 +39,14 @@
   margin-left: 0.75rem;
 }
 
-/* Add Noto Sans Arabic font */
+/* Noto Sans Arabic font */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+/* Additional RTL utilities */
+[dir="rtl"] .group:hover .group-hover\:translate-x-1 {
+  --tw-translate-x: -0.25rem;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
