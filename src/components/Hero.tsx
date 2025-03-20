@@ -7,29 +7,29 @@ const Hero = () => {
 
   const translations = {
     ar: {
-      zeroCommission: 'صفر عمولة',
+      zeroCommission: 'قيادة بدون عمولة',
       title: 'احتفظ بنسبة ',
       titleSpan: '١٠٠٪',
       titleEnd: ' من أرباحك',
-      subtitle: 'اشترك في جيني واستمتع بعمولة صفرية على جميع رحلاتك. لا رسوم خفية، فقط اشتراك بسيط يتيح لك الاحتفاظ بكل ما تكسبه.',
+      subtitle: 'قل وداعًا للعمولات المرتفعة والأرباح غير المؤكدة! مع باقات الاشتراك من جيني، استمتع بعمولة صفرية واحتفظ بنسبة 100٪ من أرباحك. اختر الخطة التي تناسب أهداف القيادة الخاصة بك وعزز أرباحك على الفور.',
       startEarning: 'ابدأ الكسب الآن',
       features: {
-        commission: 'صفر عمولة',
-        earnings: 'احتفظ بكامل أرباحك',
-        activation: 'تفعيل فوري'
+        commission: 'قيادة بدون عمولة',
+        earnings: 'زيادة الأرباح',
+        activation: 'احصل على تفعيل فوري'
       }
     },
     en: {
-      zeroCommission: 'Zero Commission',
+      zeroCommission: 'Drive with Zero Commission',
       title: 'Keep ',
       titleSpan: '100%',
       titleEnd: ' of what you earn',
-      subtitle: 'Subscribe to Jeeny and enjoy zero commission on all your rides. No hidden fees, just a simple subscription that lets you keep everything you earn.',
+      subtitle: "Say good-bye to high commissions and uncertain earnings! With Jeeny's Subscription Plans, enjoy zero commission and keep 100% of your earnings. Choose the plan that best fits your driving goals and boost your earnings instantly.",
       startEarning: 'Start Earning More',
       features: {
-        commission: 'Zero Commission',
-        earnings: 'Keep 100% Earnings',
-        activation: 'Instant activation'
+        commission: 'Drive with Zero Commission',
+        earnings: 'Unlock More Earnings',
+        activation: 'Get Instance Activation'
       }
     }
   };

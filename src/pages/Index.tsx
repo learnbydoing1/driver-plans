@@ -14,37 +14,33 @@ const Index = () => {
 
   const translations = {
     ar: {
-      flexiblePlans: 'باقات مرنة',
-      chooseSubscription: 'اختر خطة الاشتراك',
-      selectPlan: 'اختر الخطة التي تناسب جدول قيادتك وأهدافك',
+      flexiblePlans: 'باقات الاشتراك',
+      chooseSubscription: 'اختر طريقة قيادتك',
+      selectPlan: 'اختر خطة الاشتراك التي تناسب جدول قيادتك وأهدافك',
       weeklyFeatures: [
-        'صفر عمولة على الرحلات',
-        'أولوية في طلبات التوصيل',
-        'أولوية في ساعات الذروة',
-        'الوصول إلى مجتمع السائقين'
+        'صفر عمولة على الرحلات - احتفظ بنسبة 100٪ من أرباحك',
+        'استمتع بزيادة مضمونة في الدخل كل أسبوع',
+        'وصول حصري لسائقي جيني'
       ],
       monthlyFeatures: [
-        'جميع مميزات الباقة الأسبوعية',
-        'دعم فني على مدار الساعة',
-        'برنامج مكافآت السائقين',
-        'خصومات حصرية من الشركاء'
+        'تشمل جميع مزايا الباقة الأسبوعية',
+        'قيادة خالية من التوتر مع أرباح متوقعة',
+        'وفر أكثر على المدى الطويل مع تكلفة اشتراك أقل'
       ]
     },
     en: {
-      flexiblePlans: 'Flexible Plans',
-      chooseSubscription: 'Choose Your Subscription Plan',
-      selectPlan: 'Select the plan that best fits your driving schedule and goals',
+      flexiblePlans: 'Subscription Plans',
+      chooseSubscription: 'Drive Your Way',
+      selectPlan: 'Choose the subscription plan that best fits your driving schedule and goals',
       weeklyFeatures: [
-        'Zero commission on rides',
-        'Priority ride matching',
-        'Weekend peak hour priority',
-        'Access to driver community'
+        'Zero commission on rides – Keep 100% of your earnings',
+        'Enjoy a guaranteed income boost every week',
+        'Exclusive access for Jeeny drivers'
       ],
       monthlyFeatures: [
-        'All Weekly Plan features',
-        '24/7 Premium support',
-        'Driver perks program access',
-        'Exclusive partner discounts'
+        'All Weekly Plan benefits included',
+        'Drive stress-free with predictable earnings',
+        'Save more in the long run with a lower subscription cost'
       ]
     }
   };
@@ -68,7 +64,7 @@ const Index = () => {
       <main className="flex-grow">
         <Hero />
         
-        <section className="py-16 px-4 md:py-24">
+        <section className="py-16 px-4 md:py-24" id="pricing">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <span className="inline-block px-4 py-1.5 mb-6 text-sm font-medium text-jeeny bg-jeeny/10 rounded-full">
