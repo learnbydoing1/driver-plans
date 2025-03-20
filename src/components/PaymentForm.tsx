@@ -1,5 +1,7 @@
+
 import { useState } from 'react';
 import { Wallet, CreditCard, Apple } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface PaymentFormProps {
   selectedPlan: string;
@@ -44,27 +46,29 @@ const PaymentOption = ({
 
 const CardDetailsForm = ({ 
   cardDetails, 
-  setCardDetails
+  setCardDetails,
+  translations
 }: { 
   cardDetails: CardDetails;
   setCardDetails: (details: CardDetails) => void;
+  translations: any;
 }) => (
   <div className="mt-6 space-y-4">
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Name on Card
+        {translations.nameOnCard}
       </label>
       <input
         type="text"
         value={cardDetails.name}
         onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
-        placeholder="John Doe"
+        placeholder={translations.namePlaceholder}
       />
     </div>
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Card Number
+        {translations.cardNumber}
       </label>
       <input
         type="text"
@@ -81,7 +85,7 @@ const CardDetailsForm = ({
     <div className="grid grid-cols-2 gap-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Expiry Date
+          {translations.expiryDate}
         </label>
         <input
           type="text"
@@ -96,12 +100,12 @@ const CardDetailsForm = ({
             }
           }}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-jeeny focus:border-jeeny"
-          placeholder="MM/YY"
+          placeholder={translations.expiryPlaceholder}
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          CVV
+          {translations.cvv}
         </label>
         <input
           type="text"
@@ -126,49 +130,96 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ selectedPlan, planPrice }) =>
     cvv: '',
     name: ''
   });
+  
+  const { language } = useLanguage();
+
+  const translations = {
+    ar: {
+      paymentMethod: 'طريقة الدفع',
+      jeenyWallet: 'محفظة جيني',
+      jeenyWalletDesc: 'ادفع باستخدام رصيد محفظتك',
+      applePay: 'آبل باي',
+      applePayDesc: 'ادفع باستخدام آبل باي',
+      creditCard: 'بطاقة الائتمان',
+      creditCardDesc: 'ادفع باستخدام بطاقة الائتمان',
+      nameOnCard: 'الاسم على البطاقة',
+      cardNumber: 'رقم البطاقة',
+      expiryDate: 'تاريخ الانتهاء',
+      cvv: 'رمز التحقق',
+      total: 'المجموع',
+      payNow: 'ادفع الآن',
+      namePlaceholder: 'محمد عبدالله',
+      expiryPlaceholder: 'شهر/سنة'
+    },
+    en: {
+      paymentMethod: 'Payment Method',
+      jeenyWallet: 'Jeeny Wallet',
+      jeenyWalletDesc: 'Pay using your wallet balance',
+      applePay: 'Apple Pay',
+      applePayDesc: 'Pay using Apple Pay',
+      creditCard: 'Credit Card',
+      creditCardDesc: 'Pay using your credit card',
+      nameOnCard: 'Name on Card',
+      cardNumber: 'Card Number',
+      expiryDate: 'Expiry Date',
+      cvv: 'CVV',
+      total: 'Total',
+      payNow: 'Pay Now',
+      namePlaceholder: 'John Doe',
+      expiryPlaceholder: 'MM/YY'
+    }
+  };
+
+  const t = translations[language];
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">
       <h2 className="text-2xl font-bold mb-6">
-        Payment Method
+        {t.paymentMethod}
       </h2>
       
       <div className="space-y-4 mb-8">
         <PaymentOption
           icon={Wallet}
-          title="Jeeny Wallet"
-          description="Pay using your wallet balance"
+          title={t.jeenyWallet}
+          description={t.jeenyWalletDesc}
           selected={selectedPayment === 'wallet'}
           onClick={() => setSelectedPayment('wallet')}
         />
         <PaymentOption
           icon={Apple}
-          title="Apple Pay"
-          description="Pay using Apple Pay"
+          title={t.applePay}
+          description={t.applePayDesc}
           selected={selectedPayment === 'apple'}
           onClick={() => setSelectedPayment('apple')}
         />
         <PaymentOption
           icon={CreditCard}
-          title="Credit Card"
-          description="Pay using your credit card"
+          title={t.creditCard}
+          description={t.creditCardDesc}
           selected={selectedPayment === 'card'}
           onClick={() => setSelectedPayment('card')}
         />
       </div>
 
       {selectedPayment === 'card' && (
-        <CardDetailsForm cardDetails={cardDetails} setCardDetails={setCardDetails} />
+        <CardDetailsForm 
+          cardDetails={cardDetails} 
+          setCardDetails={setCardDetails}
+          translations={t}
+        />
       )}
 
       <div className="mt-8 pt-6 border-t">
         <div className="flex justify-between items-center mb-6">
-          <span className="text-gray-600">Total</span>
-          <span className="text-2xl font-bold">SAR {planPrice}</span>
+          <span className="text-gray-600">{t.total}</span>
+          <span className="text-2xl font-bold">
+            {language === 'ar' ? `${planPrice} ريال` : `SAR ${planPrice}`}
+          </span>
         </div>
 
         <button className="w-full py-3 px-4 bg-jeeny text-white font-medium rounded-lg hover:bg-jeeny/90 transition-colors">
-          Pay Now
+          {t.payNow}
         </button>
       </div>
     </div>
