@@ -21,10 +21,10 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
 
   const translations = {
     ar: {
-      weekly: 'أسبوعي',
-      monthly: 'شهري',
+      weekly: 'الاشتراك الأسبوعي',
+      monthly: 'الاشتراك الشهري',
       selected: 'تم الاختيار',
-      selectPlan: 'اختر الباقة'
+      selectPlan: 'اشترك الآن'
     },
     en: {
       weekly: 'Weekly',
